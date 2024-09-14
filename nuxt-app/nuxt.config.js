@@ -1,4 +1,5 @@
-export default {
+// nuxt.config.js
+export default defineNuxtConfig({
   ssr: true,
   target: 'server',
   head: {
@@ -17,13 +18,14 @@ export default {
   ],
   components: true,
   buildModules: [
-    '@nuxt/postcss8', // Ensure this is included
-    '@nuxtjs/tailwindcss' // Add Tailwind CSS module
+    '@nuxt/postcss8',
+    '@nuxtjs/tailwindcss'
   ],
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    'nuxt-csurf'  // Add the CSRF module here
   ],
   axios: {
     baseURL: 'http://172.104.224.207:5000/api' // Flask API
@@ -48,11 +50,17 @@ export default {
         }
       }
     },
-    plugins: ['~/plugins/auth.js'] // Ensure the auth plugin is included
+    plugins: ['~/plugins/auth.js']
   },
   build: {},
   server: {
-    port: 3000, // default: 3000
-    host: '0.0.0.0' // default: localhost
+    port: 3000,
+    host: '0.0.0.0'
+  },
+  csurf: {
+    https: false, // Set to true in production
+    cookieKey: '', // Specify your cookie key here
+    methodsToProtect: ['POST', 'PUT', 'PATCH'], // Specify methods to protect
+    headerName: 'csrf-token' // Specify the header name for CSRF token
   }
-}
+});
