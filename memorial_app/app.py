@@ -8,6 +8,7 @@ from extensions import db, migrate, login, cors, mail, security
 from routes import auth, memorials, payments
 from models import User, Role, MemorialProfile, TimelineEvent, Tribute, PaymentSubscription, Media, QRCode, ActivityLog
 from flask_security import SQLAlchemyUserDatastore
+from flask_cors import CORS  # Import Flask-CORS
 
 def create_app():
     app = Flask(__name__)
@@ -28,6 +29,9 @@ def create_app():
 
     with app.app_context():
         db.create_all()  # Ensure the database tables are created
+
+    # Enable CORS for all routes
+    CORS(app, resources={r"/api/*": {"origins": "http://172.104.224.207:3000"}})
 
     return app
 
