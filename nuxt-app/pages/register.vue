@@ -37,6 +37,7 @@
     },
     methods: {
       async register() {
+        console.log('Register button clicked') // Debugging log
         try {
           const response = await this.$axios.post('/register', this.form)
           console.log('Registration successful:', response.data)
