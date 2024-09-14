@@ -7,7 +7,7 @@ from flask import Blueprint
 
 bp = Blueprint('memorials', __name__)
 
-@bp.route('/api/memorials', methods=['POST'])
+@bp.route('/api/new_profile', methods=['POST'])
 def create_memorial():
     data = request.form
     files = request.files
