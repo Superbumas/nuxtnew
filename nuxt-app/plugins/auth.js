@@ -1,6 +1,9 @@
 export default function ({ $auth }) {
   console.log('Auth plugin loaded')
-  $auth.onError((error, name, endpoint) => {
-    console.error(name, error)
-  })
+  if (!$auth.loggedIn) {
+    return
+  }
+
+  const username = $auth.user.username
+  console.log(`Logged in as: ${username}`)
 }

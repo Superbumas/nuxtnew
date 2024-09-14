@@ -44,7 +44,8 @@ export default {
           user: { url: '/user', method: 'get' }
         }
       }
-    }
+    },
+    plugins: ['~/plugins/auth.js'] // Ensure the auth plugin is included
   },
   build: {},
   server: {
