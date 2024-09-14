@@ -43,13 +43,12 @@ auth: {
         autoFetch: true
       },
       endpoints: {
-        login: { url: '/auth/login', method: 'post', propertyName: 'token' },
-        logout: { url: '/auth/logout', method: 'post' },
-        user: { url: '/auth/user', method: 'get', propertyName: 'user' }
+        login: { url: '/login', method: 'post', propertyName: 'token' },
+        logout: { url: '/logout', method: 'post' },
+        user: { url: '/user', method: 'get', propertyName: 'user' }
       }
     }
-  },
-  plugins: ['~/plugins/auth.js']
+  }
 },
 build: {},
 server: {
