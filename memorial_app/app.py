@@ -34,7 +34,7 @@ def create_app():
         db.create_all()  # Ensure the database tables are created
 
     # Enable CORS for all routes
-    CORS(app, resources={r"/api/*": {"origins": "http://172.104.224.207:3000"}})
+    CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:3000"}})
 
     # Set up logging
     if not app.debug:
