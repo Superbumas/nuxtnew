@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 from flask import Flask, request
 from config import Config
-from extensions import db, migrate, login, cors, mail, security
+from extensions import db, migrate, login, cors, mail, security, csrf, upload
 from routes import auth, memorials, payments
 from models import User, Role, MemorialProfile, TimelineEvent, Tribute, PaymentSubscription, Media, QRCode, ActivityLog
 from flask_security import SQLAlchemyUserDatastore
@@ -22,6 +22,8 @@ def create_app():
     login.init_app(app)
     cors.init_app(app, resources={r"/api/*": {"origins": "http://172.104.224.207:3000"}})  # Configure CORS for API routes
     mail.init_app(app)
+    csrf.init_app(app)
+    upload.init_app(app)
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security.init_app(app, user_datastore)
