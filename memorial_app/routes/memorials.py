@@ -1,10 +1,8 @@
 from flask import request, jsonify
-from werkzeug.utils import secure_filename
+from utils import secure_file_name  # Import the custom utility function
 import os
 from memorial_app import db
 from memorial_app.models import MemorialProfile
-from memorial_app.app import bp
-from utils import secure_file_name 
 
 @bp.route('/api/memorials', methods=['POST'])
 def create_memorial():
