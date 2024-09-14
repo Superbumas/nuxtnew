@@ -12,11 +12,13 @@
             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
             <input v-model="email" type="email" id="email" required
                    class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" />
+            <p v-if="emailError" class="text-red-500 text-sm">{{ emailError }}</p>
           </div>
           <div class="mb-4">
             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
             <input v-model="password" type="password" id="password" required
                    class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" />
+            <p v-if="passwordError" class="text-red-500 text-sm">{{ passwordError }}</p>
           </div>
           <div class="mb-6">
             <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
@@ -37,7 +39,9 @@
         email: '',
         password: '',
         confirmPassword: '',
-        csrfToken: ''  // Store CSRF token
+        csrfToken: '',  // Store CSRF token
+        emailError: '',
+        passwordError: ''
       };
     },
     async created() {
@@ -53,7 +57,32 @@
           console.error('Error fetching CSRF token:', error);
         }
       },
+      validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  // Simple email regex
+        return re.test(String(email).toLowerCase());
+      },
+      validatePassword(password) {
+        // Password must be at least 8 characters long and contain at least one number and one special character
+        const re = /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+        return re.test(password);
+      },
       async registerUser() {
+        // Reset errors
+        this.emailError = '';
+        this.passwordError = '';
+  
+        // Validate email
+        if (!this.validateEmail(this.email)) {
+          this.emailError = 'Invalid email format.';
+          return;
+        }
+  
+        // Validate password
+        if (!this.validatePassword(this.password)) {
+          this.passwordError = 'Password must be at least 8 characters long and contain at least one number and one special character.';
+          return;
+        }
+  
         try {
           const response = await this.$axios.$post('http://172.104.224.207:5000/api/register', {
             username: this.username,
