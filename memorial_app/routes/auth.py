@@ -4,10 +4,12 @@ from models import User
 from extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
-from flask import url_for
+from flask import url_for, jsonify, request, Blueprint, CORS
 
 bp = Blueprint('auth', __name__)
+
 CORS(bp, resources={r"/api/*": {"origins": "http://172.104.224.207:3000"}})
+
 @bp.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
