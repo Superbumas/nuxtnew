@@ -9,9 +9,9 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
-    migrate.init_app(app, db)
+    migrate.init_app(app, db)  # Initialize Migrate
     login.init_app(app)
-    cors.init_app(app)  # Initialize CORS
+    cors.init_app(app)
     mail.init_app(app)
     security.init_app(app)
 

@@ -23,7 +23,7 @@ export default {
       '@nuxtjs/dotenv'
     ],
     axios: {
-      baseURL: 'http://localhost:5000' // Adjust the port if your Flask server is running on a different port
+      baseURL: 'http://172.104.224.207:5000' // Adjust the port if your Flask server is running on a different port
     },
     auth: {
       strategies: {
