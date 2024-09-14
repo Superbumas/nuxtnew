@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from memorial_app.models import MemorialProfile  # Assuming you have a model defined
-from memorial_app import db
+from models import MemorialProfile  # Assuming you have a model defined
+from models import db
 
 memorials_bp = Blueprint('memorials', __name__)
 
