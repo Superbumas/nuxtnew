@@ -20,7 +20,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
-    cors.init_app(app, resources={r"/api/*": {"origins": "*"}})  # Configure CORS for API routes
+    cors.init_app(app, resources={r"/api/*": {"origins": "http://127.0.0.1:3000"}})  # Configure CORS for API routes
     mail.init_app(app)
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -32,9 +32,6 @@ def create_app():
 
     with app.app_context():
         db.create_all()  # Ensure the database tables are created
-
-    # Enable CORS for all routes
-    CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:3000"}})
 
     # Set up logging
     if not app.debug:
