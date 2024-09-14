@@ -5,8 +5,6 @@ import uuid
 from datetime import datetime, date, time, timedelta
 from extensions import db
 
-db = SQLAlchemy()
-
 roles_users = db.Table(
     'roles_users',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
