@@ -22,7 +22,7 @@ def create_app():
     migrate.init_app(app, db)
     login.init_app(app)
     CORS(app, resources={r"/api/*": {
-       "origins": "http://172.104.224.207:3000",
+       "origins": "http://127.0.0.1:3000",
        "methods": ["GET", "POST", "OPTIONS"],
        "allow_headers": ["Content-Type", "Authorization", "csrf_token"]
     }}) 
@@ -56,4 +56,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True, host='0.0.0.0', port=5000)  # Ensure the host and port match your configuration
+    app.run(debug=True, host='127.0.0.1', port=5000)  # Ensure the host and port match your configuration

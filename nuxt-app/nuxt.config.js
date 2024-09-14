@@ -27,7 +27,7 @@ modules: [
 
 ],
 axios: {
-  baseURL: 'http://172.104.224.207:5000/api', // Flask API
+  baseURL: '/api', // Flask API
 },
 auth: {
   strategies: {

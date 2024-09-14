@@ -48,7 +48,7 @@
     methods: {
       async fetchCsrfToken() {
         try {
-          const response = await fetch('http://172.104.224.207:5000/api/csrf-token');
+          const response = await fetch('/api/csrf-token');
           const data = await response.json();
           this.csrfToken = data.csrf_token;  // Store the CSRF token
         } catch (error) {
@@ -57,7 +57,7 @@
       },
       async registerUser() {
         try {
-          const response = await fetch('http://172.104.224.207:5000/api/register', {
+          const response = await fetch('/api/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
