@@ -57,29 +57,32 @@
       },
       async registerUser() {
         try {
-          const response = await this.$axios.$post('http://172.104.224.207:5000/api/register', {
-            username: this.username,
-            email: this.email,
-            password: this.password,
-            confirm_password: this.confirmPassword,
-            csrf_token: this.csrfToken,  // Include CSRF token
-          }, {
+          const response = await fetch('http://172.104.224.207:5000/api/register', {
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'csrf-token': this.csrfToken, // Set CSRF token in headers
+              'csrf-token': this.csrfToken, // Include CSRF token in headers
             },
+            body: JSON.stringify({
+              username: this.username,
+              email: this.email,
+              password: this.password,
+              confirm_password: this.confirmPassword,
+              csrf_token: this.csrfToken,  // Include CSRF token in body
+            }),
           });
-          console.log('Registration successful:', response);
+  
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Registration failed');
+          }
+  
+          const result = await response.json();
+          console.log('Registration successful:', result);
           // Optionally, redirect or show a success message here
         } catch (error) {
-          // Enhanced error handling
-          if (error.response) {
-            console.error('Registration failed:', error.response.data);
-            alert(`Error: ${error.response.data.error || 'Registration failed'}`);
-          } else {
-            console.error('Registration failed:', error);
-            alert('An unexpected error occurred.');
-          }
+          console.error('Registration failed:', error);
+          alert(`Error: ${error.message}`);
         }
       }
     }
