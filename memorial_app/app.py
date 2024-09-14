@@ -16,7 +16,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
-    cors.init_app(app)
+    cors.init_app(app, resources={r"/api/*": {"origins": "*"}})  # Configure CORS for API routes
     mail.init_app(app)
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -33,4 +33,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True, host='127.0.0.1', port=5000)  # Ensure the host and port match your configuration
