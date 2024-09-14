@@ -60,7 +60,10 @@
             email: this.email,
             password: this.password,
             confirm_password: this.confirmPassword,
-            csrf_token: this.csrfToken  // Include CSRF token
+            csrf_token: this.csrfToken,  // Include CSRF token
+            headers: {
+           'Content-Type': 'application/json'  // Set content type to JSON
+                }
           });
           console.log('Registration successful:', response);
           // Optionally, redirect or show a success message here

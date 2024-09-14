@@ -21,7 +21,11 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
-    CORS(app, resources={r"/api/*": {"origins": "http://172.104.224.207:3000"}})  
+    CORS(app, resources={r"/api/*": {
+       "origins": "http://172.104.224.207:3000",
+       "methods": ["GET", "POST", "OPTIONS"],
+       "allow_headers": ["Content-Type", "Authorization", "csrf_token"]
+    }}) 
     mail.init_app(app)
     csrf.init_app(app)
 
