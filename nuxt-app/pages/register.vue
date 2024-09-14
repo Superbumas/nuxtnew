@@ -11,10 +11,6 @@
           <input type="password" v-model="form.password" required />
         </div>
         <div>
-          <label for="confirm_password">Confirm Password</label>
-          <input type="password" v-model="form.confirm_password" required />
-        </div>
-        <div>
           <label for="first_name">First Name</label>
           <input type="text" v-model="form.first_name" required />
         </div>
@@ -34,7 +30,6 @@
         form: {
           email: '',
           password: '',
-          confirm_password: '',
           first_name: '',
           last_name: ''
         }

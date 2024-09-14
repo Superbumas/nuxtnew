@@ -1,43 +1,48 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, request, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from models import User
-from forms import RegistrationForm, LoginForm
 from extensions import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 bp = Blueprint('auth', __name__)
 
-@bp.route('/register', methods=['GET', 'POST'])
+@bp.route('/api/register', methods=['POST'])
 def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User(
-            email=form.email.data,
-            first_name=form.first_name.data,
-            last_name=form.last_name.data
-        )
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('Registration successful!', 'success')
-        return redirect(url_for('auth.login'))
-    return render_template('register.html', form=form)
+    data = request.get_json()
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({"error": "User already exists"}), 400
 
-@bp.route('/login', methods=['GET', 'POST'])
+    user = User(
+        email=data['email'],
+        first_name=data['first_name'],
+        last_name=data['last_name'],
+        password_hash=generate_password_hash(data['password'])
+    )
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({"message": "Registration successful"}), 201
+
+@bp.route('/api/login', methods=['POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
-            flash('Login successful!', 'success')
-            return redirect(url_for('main.index'))
-        else:
-            flash('Invalid email or password', 'danger')
-    return render_template('login.html', form=form)
+    data = request.get_json()
+    user = User.query.filter_by(email=data['email']).first()
+    if user and check_password_hash(user.password_hash, data['password']):
+        login_user(user)
+        return jsonify({"message": "Login successful"}), 200
+    return jsonify({"error": "Invalid email or password"}), 401
 
-@bp.route('/logout')
+@bp.route('/api/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.', 'info')
-    return redirect(url_for('auth.login'))
+    return jsonify({"message": "Logout successful"}), 200
+
+@bp.route('/api/user', methods=['GET'])
+@login_required
+def get_user():
+    user = {
+        "email": current_user.email,
+        "first_name": current_user.first_name,
+        "last_name": current_user.last_name
+    }
+    return jsonify(user), 200
