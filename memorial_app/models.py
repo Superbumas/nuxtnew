@@ -18,20 +18,22 @@ class Role(db.Model, RoleMixin):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128))
-    google_id = db.Column(db.String(128))
-    facebook_id = db.Column(db.String(128))
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    email_verified = db.Column(db.Boolean, default=False)   
+    password_hash = db.Column(db.String(128))
     profile_photo_url = db.Column(db.String(256))
-    email_verified = db.Column(db.Boolean, default=False)
+    google_id = db.Column(db.String(128))
+    facebook_id = db.Column(db.String(128))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     role = db.Column(db.String(64))
     subscription_status = db.Column(db.String(64))
     fs_uniquifier = db.Column(db.String(64), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
+    active = db.Column(db.Boolean, default=True)
+
 
 class MemorialProfile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,7 +43,6 @@ class MemorialProfile(db.Model):
     date_of_birth = db.Column(db.Date)
     date_of_death = db.Column(db.Date)
     biography = db.Column(db.Text)
-    timeline_events = db.Column(db.JSON)  # Optional: Use a separate table if needed
     profile_photo_url = db.Column(db.String(256))
     qr_code_url = db.Column(db.String(256))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -52,6 +53,11 @@ class TimelineEvent(db.Model):
     profile_id = db.Column(db.Integer, db.ForeignKey('memorial_profile.id'), nullable=False)
     year = db.Column(db.Integer)
     event = db.Column(db.Text)
+    description = db.Column(db.Text)
+    media_url = db.Column(db.String(256))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 
 class Tribute(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -59,6 +65,12 @@ class Tribute(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     tribute_message = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    approved = db.Column(db.Boolean, default=False)
+    approved_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    approved_at = db.Column(db.DateTime, nullable=True)
+
+
 
 class PaymentSubscription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -70,6 +82,9 @@ class PaymentSubscription(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     subscription_start = db.Column(db.DateTime)
     subscription_end = db.Column(db.DateTime)
+    active = db.Column(db.Boolean, default=True)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 
 class Media(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -77,6 +92,7 @@ class Media(db.Model):
     media_type = db.Column(db.String(64))
     media_url = db.Column(db.String(256))
     uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 class QRCode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -90,3 +106,14 @@ class ActivityLog(db.Model):
     profile_id = db.Column(db.Integer, db.ForeignKey('memorial_profile.id'), nullable=False)
     action = db.Column(db.String(256))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class MemorialProfileView(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('memorial_profile.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    viewed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    viewed_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    viewed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    viewed_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
