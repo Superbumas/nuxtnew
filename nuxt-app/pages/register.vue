@@ -49,8 +49,16 @@
             confirm_password: this.confirmPassword
           });
           console.log('Registration successful:', response);
+          // Optionally, redirect or show a success message here
         } catch (error) {
-          console.error('Registration failed:', error.response.data);
+          // Enhanced error handling
+          if (error.response) {
+            console.error('Registration failed:', error.response.data);
+            alert(`Error: ${error.response.data.error || 'Registration failed'}`);
+          } else {
+            console.error('Registration failed:', error);
+            alert('An unexpected error occurred.');
+          }
         }
       }
     }
