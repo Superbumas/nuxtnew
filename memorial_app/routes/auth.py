@@ -16,6 +16,7 @@ def get_csrf_token():
 
 @bp.route('/api/register', methods=['POST'])
 def register():
+    # Check if the request content type is JSON
     if request.content_type != 'application/json':
         return jsonify({"error": "Content-Type must be application/json"}), 415
 
@@ -24,7 +25,7 @@ def register():
     # Validate CSRF token
     csrf_token = data.get('csrf_token')
     try:
-        validate_csrf(csrf_token)
+        validate_csrf(csrf_token)  # Validate the CSRF token
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
