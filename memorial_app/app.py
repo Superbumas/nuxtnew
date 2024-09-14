@@ -1,6 +1,6 @@
 from flask import Flask
 from config import Config
-from extensions import db, migrate, login, cors, mail, security
+from extensions import db, login, cors, mail, security
 from routes import auth, memorials, payments
 from models import User, MemorialProfile, TimelineEvent, Tribute, PaymentSubscription, Media, QRCode, ActivityLog
 
@@ -9,7 +9,6 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
-    migrate.init_app(app, db)
     login.init_app(app)
     cors.init_app(app)
     mail.init_app(app)
