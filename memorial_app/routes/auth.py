@@ -3,7 +3,8 @@ from flask_login import login_user, logout_user, current_user, login_required
 from models import User
 from extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
+from flask import url_for
 
 bp = Blueprint('auth', __name__)
 CORS(bp, resources={r"/api/*": {"origins": "http://172.104.224.207:3000"}})
@@ -30,7 +31,7 @@ def register():
     )
     db.session.add(user)
     db.session.commit()
-    return jsonify({"message": "Registration successful"}), 201
+    return jsonify({"message": "Registration successful", "redirect": url_for('auth.login')}), 201
 
 @bp.route('/api/login', methods=['POST'])
 def login():    
