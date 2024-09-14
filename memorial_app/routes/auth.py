@@ -19,8 +19,15 @@ def register():
     data = request.get_json()
 
     # Check if data is None or missing required fields
-    if not data or not all(key in data for key in ('email', 'username', 'password', 'confirm_password')):
+    if not data or not all(key in data for key in ('email', 'username', 'password', 'confirm_password', 'csrf_token')):
         return jsonify({"error": "Missing fields"}), 400
+
+    # Validate CSRF token
+    csrf_token = data.get('csrf_token')
+    try:
+        validate_csrf(csrf_token)  # Validate the CSRF token
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
     # Check if passwords match
     if data['password'] != data['confirm_password']:
@@ -32,7 +39,7 @@ def register():
 
     user = User(
         email=data['email'],
-        username=data['username'],  # Updated field
+        username=data['username'],
         password_hash=generate_password_hash(data['password'])
     )
     db.session.add(user)
