@@ -1,25 +1,31 @@
 <template>
-    <div>
-      <h1>Register</h1>
-      <form @submit.prevent="register">
-        <div>
-          <label for="email">Email</label>
-          <input type="email" v-model="form.email" required />
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <input type="password" v-model="form.password" required />
-        </div>
-        <div>
-          <label for="first_name">First Name</label>
-          <input type="text" v-model="form.first_name" required />
-        </div>
-        <div>
-          <label for="last_name">Last Name</label>
-          <input type="text" v-model="form.last_name" required />
-        </div>
-        <button type="submit">Register</button>
-      </form>
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+      <div class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h2 class="text-2xl font-bold mb-6 text-center">Register</h2>
+        <form @submit.prevent="registerUser">
+          <div class="mb-4">
+            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+            <input v-model="username" type="text" id="username" required
+                   class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" />
+          </div>
+          <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input v-model="email" type="email" id="email" required
+                   class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" />
+          </div>
+          <div class="mb-4">
+            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <input v-model="password" type="password" id="password" required
+                   class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" />
+          </div>
+          <div class="mb-6">
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <input v-model="confirmPassword" type="password" id="confirmPassword" required
+                   class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" />
+          </div>
+          <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded-md hover:bg-blue-600 transition duration-200">Sign Up</button>
+        </form>
+      </div>
     </div>
   </template>
   
@@ -27,25 +33,30 @@
   export default {
     data() {
       return {
-        form: {
-          email: '',
-          password: '',
-          first_name: '',
-          last_name: ''
-        }
-      }
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      };
     },
     methods: {
-      async register() {
-        console.log('Register button clicked') // Debugging log
+      async registerUser() {
         try {
-          const response = await this.$axios.post('/register', this.form)
-          console.log('Registration successful:', response.data)
-          this.$router.push('/login')
+          const response = await this.$axios.$post('/register', {
+            username: this.username,
+            email: this.email,
+            password: this.password,
+            confirm_password: this.confirmPassword
+          });
+          console.log('Registration successful:', response);
         } catch (error) {
-          console.error('Registration failed:', error.response ? error.response.data : error.message)
+          console.error('Registration failed:', error.response.data);
         }
       }
     }
-  }
+  };
   </script>
+  
+  <style scoped>
+  /* Add any additional styles here if needed */
+  </style>
