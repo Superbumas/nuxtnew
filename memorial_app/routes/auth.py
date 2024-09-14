@@ -14,7 +14,7 @@ def get_csrf_token():
     token = generate_csrf()
     return jsonify({'csrf_token': token})
 
-@bp.route('/api/register', methods=['POST'])
+@bp.route('/api/register', methods=['OPTIONS'])
 def register():
     data = request.get_json()
 
