@@ -13,7 +13,8 @@ export default {
   css: [],
   plugins: [
     '~/plugins/axios.js',
-    '~/plugins/auth.js'
+    '~/plugins/auth.js',
+    '~/plugins/cors.js'
   ],
   components: true,
   buildModules: [],
