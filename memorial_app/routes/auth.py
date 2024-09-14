@@ -14,20 +14,24 @@ def get_csrf_token():
     token = generate_csrf()
     return jsonify({'csrf_token': token})
 
-@bp.route('/api/register', methods=['OPTIONS'])
+@bp.route('/api/register', methods=['POST'])
 def register():
-    data = request.get_json()
+    if request.content_type != 'application/json':
+        return jsonify({"error": "Content-Type must be application/json"}), 415
 
-    # Check if data is None or missing required fields
-    if not data or not all(key in data for key in ('email', 'username', 'password', 'confirm_password', 'csrf_token')):
-        return jsonify({"error": "Missing fields"}), 400
+    data = request.get_json()
 
     # Validate CSRF token
     csrf_token = data.get('csrf_token')
     try:
-        validate_csrf(csrf_token)  # Validate the CSRF token
+        validate_csrf(csrf_token)
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+    # Check for required fields
+    required_fields = ['username', 'email', 'password', 'confirm_password']
+    if not all(field in data for field in required_fields):
+        return jsonify({"error": "Missing fields"}), 400
 
     # Check if passwords match
     if data['password'] != data['confirm_password']:
@@ -37,14 +41,15 @@ def register():
     if User.query.filter_by(email=data['email']).first():
         return jsonify({"error": "User already exists"}), 400
 
+    # Create new user
     user = User(
-        email=data['email'],
         username=data['username'],
+        email=data['email'],
         password_hash=generate_password_hash(data['password'])
     )
     db.session.add(user)
     db.session.commit()
-    return jsonify({"message": "Registration successful", "redirect": url_for('auth.login')}), 201
+    return jsonify({"message": "Registration successful"}), 201
 
 @bp.route('/api/login', methods=['POST'])
 def login():
