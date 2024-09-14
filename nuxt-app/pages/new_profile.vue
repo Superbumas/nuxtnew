@@ -85,7 +85,7 @@
       },
       handleFileUpload(field, event) {
         const file = event.target.files[0];
-        this.form[field] = file;
+        this.form[field] = file;  // Store the uploaded file
       },
       async submitForm() {
         const formData = new FormData();
