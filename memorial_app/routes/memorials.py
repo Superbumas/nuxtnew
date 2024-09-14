@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 from memorial_app import db
 from memorial_app.models import MemorialProfile
+from memorial_app.app import bp
 
 @bp.route('/api/memorials', methods=['POST'])
 def create_memorial():
