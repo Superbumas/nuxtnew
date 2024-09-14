@@ -36,17 +36,31 @@
         username: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        csrfToken: ''  // Store CSRF token
       };
     },
+    async created() {
+      await this.fetchCsrfToken();  // Fetch CSRF token on component creation
+    },
     methods: {
+      async fetchCsrfToken() {
+        try {
+          const response = await fetch('http://172.104.224.207:5000/api/csrf-token');
+          const data = await response.json();
+          this.csrfToken = data.csrf_token;  // Store the CSRF token
+        } catch (error) {
+          console.error('Error fetching CSRF token:', error);
+        }
+      },
       async registerUser() {
         try {
           const response = await this.$axios.$post('/register', {
             username: this.username,
             email: this.email,
             password: this.password,
-            confirm_password: this.confirmPassword
+            confirm_password: this.confirmPassword,
+            csrf_token: this.csrfToken  // Include CSRF token
           });
           console.log('Registration successful:', response);
           // Optionally, redirect or show a success message here
