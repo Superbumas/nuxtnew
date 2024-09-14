@@ -1,8 +1,11 @@
 import sys
 import os
+import logging
+from logging.handlers import RotatingFileHandler
+
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-from flask import Flask
+from flask import Flask, request
 from config import Config
 from extensions import db, migrate, login, cors, mail, security
 from routes import auth, memorials, payments
@@ -32,6 +35,19 @@ def create_app():
 
     # Enable CORS for all routes
     CORS(app, resources={r"/api/*": {"origins": "http://172.104.224.207:3000"}})
+
+    # Set up logging
+    if not app.debug:
+        if not os.path.exists('logs'):
+            os.mkdir('logs')
+        file_handler = RotatingFileHandler('logs/memorial_app.log', maxBytes=10240, backupCount=10)
+        file_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
+
+        app.logger.setLevel(logging.INFO)
+        app.logger.info('Memorial App startup')
 
     return app
 
