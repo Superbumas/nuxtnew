@@ -10,4 +10,4 @@ login = LoginManager()
 cors = CORS()
 mail = Mail()
 security = Security()
-migrate = Migrate()  # Initialize Migrate
+migrate = Migrate()
