@@ -5,7 +5,7 @@
     "scripts": {
       "dev": "concurrently \"npm run dev:nuxt\" \"npm run dev:flask\"",
       "dev:nuxt": "nuxt",
-      "dev:flask": "cd ../memorial_app && python app.py",
+      "dev:flask": "cd ../memorial_app && gunicorn -c gunicorn_config.py app:app",
       "build": "nuxt build",
       "start": "nuxt start",
       "clean": "rm -rf node_modules package-lock.json"
