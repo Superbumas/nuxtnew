@@ -24,7 +24,6 @@ def create_app():
     cors.init_app(app, resources={r"*": {"origins": "http://172.104.224.207:3000"}})    
     mail.init_app(app)
     csrf.init_app(app)
-    upload.init_app(app)
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security.init_app(app, user_datastore)
