@@ -26,7 +26,7 @@ export default {
     '@nuxtjs/dotenv'
   ],
   axios: {
-    baseURL: 'http://127.0.0.1:5000/api' // Flask API
+    baseURL: 'http://172.104.224.207:5000/api' // Flask API
   },
   auth: {
     strategies: {
