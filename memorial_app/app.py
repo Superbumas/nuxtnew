@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 from flask import Flask, request
 from config import Config
-from extensions import db, migrate, login, cors, mail, security, csrf, upload
+from extensions import db, migrate, login, cors, mail, security, csrf
 from routes import auth, memorials, payments
 from models import User, Role, MemorialProfile, TimelineEvent, Tribute, PaymentSubscription, Media, QRCode, ActivityLog
 from flask_security import SQLAlchemyUserDatastore
