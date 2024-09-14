@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from flask_security import RoleMixin
 
 db = SQLAlchemy()
 
@@ -8,6 +9,11 @@ roles_users = db.Table(
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('role_id', db.Integer, db.ForeignKey('role.id'))
 )
+
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
