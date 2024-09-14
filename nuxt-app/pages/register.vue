@@ -44,33 +44,42 @@
       await this.fetchCsrfToken();  // Fetch CSRF token on component creation
     },
     methods: {
-    async registerUser() {
+      async fetchCsrfToken() {
         try {
-            const response = await this.$axios.$post('http://172.104.224.207:5000/api/register', {
-                username: this.username,
-                email: this.email,
-                password: this.password,
-                confirm_password: this.confirmPassword,
-                csrf_token: this.csrfToken  // Include CSRF token
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'  // Set content type to JSON
-                }
-            });
-            console.log('Registration successful:', response);
-            // Optionally, redirect or show a success message here
+          const response = await fetch('http://172.104.224.207:5000/api/csrf-token');
+          const data = await response.json();
+          this.csrfToken = data.csrf_token;  // Store the CSRF token
         } catch (error) {
-            // Enhanced error handling
-            if (error.response) {
-                console.error('Registration failed:', error.response.data);
-                alert(`Error: ${error.response.data.error || 'Registration failed'}`);
-            } else {
-                console.error('Registration failed:', error);
-                alert('An unexpected error occurred.');
-            }
+          console.error('Error fetching CSRF token:', error);
         }
+      },
+      async registerUser() {
+        try {
+          const response = await this.$axios.$post('http://172.104.224.207:5000/api/register', {
+            username: this.username,
+            email: this.email,
+            password: this.password,
+            confirm_password: this.confirmPassword,
+            csrf_token: this.csrfToken  // Include CSRF token
+          }, {
+            headers: {
+              'Content-Type': 'application/json'  // Set content type to JSON
+            }
+          });
+          console.log('Registration successful:', response);
+          // Optionally, redirect or show a success message here
+        } catch (error) {
+          // Enhanced error handling
+          if (error.response) {
+            console.error('Registration failed:', error.response.data);
+            alert(`Error: ${error.response.data.error || 'Registration failed'}`);
+          } else {
+            console.error('Registration failed:', error);
+            alert('An unexpected error occurred.');
+          }
+        }
+      }
     }
-}
   };
   </script>
   
