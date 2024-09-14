@@ -55,7 +55,7 @@
       },
       async registerUser() {
         try {
-          const response = await this.$axios.$post('/register', {
+          const response = await this.$axios.$post('/api/register', {
             username: this.username,
             email: this.email,
             password: this.password,
