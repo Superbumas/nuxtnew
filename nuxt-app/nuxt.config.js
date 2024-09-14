@@ -16,7 +16,10 @@ export default {
     '~/plugins/auth.js'
   ],
   components: true,
-  buildModules: [],
+  buildModules: [
+    '@nuxt/postcss8', // Ensure this is included
+    '@nuxtjs/tailwindcss' // Add Tailwind CSS module
+  ],
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
