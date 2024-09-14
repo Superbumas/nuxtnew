@@ -17,12 +17,13 @@ plugins: [
 ],
 components: true,
 buildModules: [
-  '@nuxtjs/tailwindcss'
+  '@nuxtjs/tailwindcss',
+  '@nuxtjs/axios'
 ],
 modules: [
   '@nuxtjs/auth-next',
   '@nuxtjs/dotenv',
-  'nuxt-csurf'  
+  'nuxt-csurf',
 
 ],
 axios: {
@@ -42,9 +43,9 @@ auth: {
         autoFetch: true
       },
       endpoints: {
-        login: { url: '/login', method: 'post' },
-        logout: { url: '/logout', method: 'post' },
-        user: { url: '/user', method: 'get' }
+        login: { url: '/auth/login', method: 'post', propertyName: 'token' },
+        logout: { url: '/auth/logout', method: 'post' },
+        user: { url: '/auth/user', method: 'get', propertyName: 'user' }
       }
     }
   },
