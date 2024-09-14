@@ -5,6 +5,7 @@ from extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import url_for, jsonify, request, Blueprint
 from utils import secure_file_name 
+from flask_wtf.csrf import generate_csrf
 
 bp = Blueprint('auth', __name__)
 
@@ -58,3 +59,8 @@ def get_user():
         "last_name": current_user.last_name
     }
     return jsonify(user), 200
+
+@bp.route('/api/csrf-token', methods=['GET'])
+def get_csrf_token():
+    token = generate_csrf()
+    return jsonify({'csrf_token': token})

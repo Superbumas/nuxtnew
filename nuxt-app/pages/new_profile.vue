@@ -66,10 +66,23 @@
           country: '',
           city: '',
           timeline_events: ''
-        }
+        },
+        csrfToken: ''
       };
     },
+    async created() {
+      await this.fetchCsrfToken();
+    },
     methods: {
+      async fetchCsrfToken() {
+        try {
+          const response = await fetch('http://172.104.224.207:5000/api/csrf-token');
+          const data = await response.json();
+          this.csrfToken = data.csrf_token;
+        } catch (error) {
+          console.error('Error fetching CSRF token:', error);
+        }
+      },
       handleFileUpload(field, event) {
         const file = event.target.files[0];
         this.form[field] = file;
@@ -79,15 +92,19 @@
         for (const key in this.form) {
           formData.append(key, this.form[key]);
         }
+        formData.append('csrf_token', this.csrfToken);  // Include CSRF token
+  
         try {
-          const response = await fetch('/api/memorial_profiles', {
+          const response = await fetch('http://172.104.224.207:5000/api/memorials', {
             method: 'POST',
             body: formData
           });
           if (response.ok) {
             // Handle successful form submission
+            console.log('Form submitted successfully');
           } else {
             // Handle form submission error
+            console.error('Form submission error:', response.statusText);
           }
         } catch (error) {
           console.error('Error submitting form:', error);
