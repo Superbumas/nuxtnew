@@ -9,6 +9,7 @@ bp = Blueprint('auth', __name__)
 @bp.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
+    print("Received data:", data)  # Log the received data
     if User.query.filter_by(email=data['email']).first():
         return jsonify({"error": "User already exists"}), 400
 
