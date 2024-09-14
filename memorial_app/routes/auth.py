@@ -16,17 +16,17 @@ def get_csrf_token():
 
 @bp.route('/api/register', methods=['POST'])
 def register():
-    print("Received data:", request.get_json())  # Log the incoming data
     # Check if the request content type is JSON
     if request.content_type != 'application/json':
         return jsonify({"error": "Content-Type must be application/json"}), 415
 
     data = request.get_json()
+    print("Received data:", data)  # Log the incoming data
 
     # Validate CSRF token
     csrf_token = data.get('csrf_token')
     try:
-        validate_csrf(csrf_token)  # Validate the CSRF token
+        validate_csrf(csrf_token)
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
@@ -35,7 +35,7 @@ def register():
     if not all(field in data for field in required_fields):
         return jsonify({"error": "Missing fields"}), 400
 
-    # Check if passwords match
+       # Check if passwords match
     if data['password'] != data['confirm_password']:
         return jsonify({"error": "Passwords do not match"}), 400
 
@@ -52,6 +52,7 @@ def register():
     db.session.add(user)
     db.session.commit()
     return jsonify({"message": "Registration successful"}), 201
+
 
 @bp.route('/api/login', methods=['POST'])
 def login():
