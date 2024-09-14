@@ -1,10 +1,10 @@
 from flask import Blueprint, request, jsonify
-from models import MemorialProfile  # Assuming you have a model defined
-from models import db
+from models import MemorialProfile
+from extensions import db
 
-memorials_bp = Blueprint('memorials', __name__)
+bp = Blueprint('memorials', __name__)
 
-@memorials_bp.route('/api/memorials', methods=['POST'])
+@bp.route('/api/memorials', methods=['POST'])
 def create_memorial():
     data = request.get_json()
     new_profile = MemorialProfile(
@@ -17,12 +17,12 @@ def create_memorial():
     db.session.commit()
     return jsonify(new_profile.to_dict()), 201
 
-@memorials_bp.route('/api/memorials', methods=['GET'])
+@bp.route('/api/memorials', methods=['GET'])
 def get_memorials():
     profiles = MemorialProfile.query.all()
     return jsonify([profile.to_dict() for profile in profiles])
 
-@memorials_bp.route('/api/memorials/<int:id>', methods=['DELETE'])
+@bp.route('/api/memorials/<int:id>', methods=['DELETE'])
 def delete_memorial(id):
     profile = MemorialProfile.query.get_or_404(id)
     db.session.delete(profile)
