@@ -3,6 +3,9 @@ from utils import secure_file_name  # Import the custom utility function
 import os
 from extensions import db
 from models import MemorialProfile
+from flask import Blueprint
+
+bp = Blueprint('memorials', __name__)
 
 @bp.route('/api/memorials', methods=['POST'])
 def create_memorial():
