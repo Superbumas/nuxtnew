@@ -9,7 +9,11 @@ bp = Blueprint('auth', __name__)
 @bp.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
-    print("Received data:", data)  # Log the received data
+
+    # Check if data is None or missing required fields
+    if not data or not all(key in data for key in ('email', 'password', 'first_name', 'last_name')):
+        return jsonify({"error": "Missing fields"}), 400
+
     if User.query.filter_by(email=data['email']).first():
         return jsonify({"error": "User already exists"}), 400
 
@@ -24,8 +28,9 @@ def register():
     return jsonify({"message": "Registration successful"}), 201
 
 @bp.route('/api/login', methods=['POST'])
-def login():
+def login():    
     data = request.get_json()
+    print("Received data:", data)  # Log the received data
     user = User.query.filter_by(email=data['email']).first()
     if user and check_password_hash(user.password_hash, data['password']):
         login_user(user)
