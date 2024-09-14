@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_security import UserMixin, RoleMixin
 import uuid
 from datetime import datetime, date, time, timedelta
+from extensions import db
 
 db = SQLAlchemy()
 
