@@ -12,6 +12,7 @@ from routes import auth, memorials, payments
 from models import User, Role, MemorialProfile, TimelineEvent, Tribute, PaymentSubscription, Media, QRCode, ActivityLog
 from flask_security import SQLAlchemyUserDatastore
 from flask_cors import CORS  # Import Flask-CORS
+from utils import secure_file_name
 
 def create_app():
     app = Flask(__name__)

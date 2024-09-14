@@ -4,6 +4,7 @@ from models import User
 from extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import url_for, jsonify, request, Blueprint
+from utils import secure_file_name 
 
 bp = Blueprint('auth', __name__)
 

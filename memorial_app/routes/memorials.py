@@ -4,6 +4,7 @@ import os
 from memorial_app import db
 from memorial_app.models import MemorialProfile
 from memorial_app.app import bp
+from utils import secure_file_name 
 
 @bp.route('/api/memorials', methods=['POST'])
 def create_memorial():
@@ -13,7 +14,7 @@ def create_memorial():
     # Save profile photo
     profile_photo = files.get('profile_photo_url')
     if profile_photo:
-        profile_photo_filename = secure_filename(profile_photo.filename)
+        profile_photo_filename = secure_file_name(profile_photo.filename)
         profile_photo.save(os.path.join('uploads', profile_photo_filename))
     else:
         profile_photo_filename = None
@@ -21,7 +22,7 @@ def create_memorial():
     # Save cover photo
     cover_photo = files.get('cover_photo_url')
     if cover_photo:
-        cover_photo_filename = secure_filename(cover_photo.filename)
+        cover_photo_filename = secure_file_name(cover_photo.filename)
         cover_photo.save(os.path.join('uploads', cover_photo_filename))
     else:
         cover_photo_filename = None
