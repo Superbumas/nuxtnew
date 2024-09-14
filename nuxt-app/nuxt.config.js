@@ -13,7 +13,6 @@ head: {
 },
 css: [],
 plugins: [
-  '~/plugins/axios.js',
   '~/plugins/auth.js'
 ],
 components: true,
@@ -21,11 +20,10 @@ buildModules: [
   '@nuxtjs/tailwindcss'
 ],
 modules: [
-  '@nuxtjs/axios',
   '@nuxtjs/auth-next',
   '@nuxtjs/dotenv',
   'nuxt-csurf'  
-  
+
 ],
 axios: {
   baseURL: 'http://172.104.224.207:5000/api', // Flask API
