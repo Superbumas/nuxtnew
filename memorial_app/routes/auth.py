@@ -11,16 +11,20 @@ def register():
     data = request.get_json()
 
     # Check if data is None or missing required fields
-    if not data or not all(key in data for key in ('email', 'password', 'first_name', 'last_name')):
+    if not data or not all(key in data for key in ('email', 'username', 'password', 'confirm_password')):
         return jsonify({"error": "Missing fields"}), 400
 
+    # Check if passwords match
+    if data['password'] != data['confirm_password']:
+        return jsonify({"error": "Passwords do not match"}), 400
+
+    # Check if user already exists
     if User.query.filter_by(email=data['email']).first():
         return jsonify({"error": "User already exists"}), 400
 
     user = User(
         email=data['email'],
-        first_name=data['first_name'],
-        last_name=data['last_name'],
+        username=data['username'],  # Updated field
         password_hash=generate_password_hash(data['password'])
     )
     db.session.add(user)
